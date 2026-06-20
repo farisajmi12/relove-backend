@@ -164,3 +164,31 @@ exports.getListingById = async (req, res) => {
         res.status(500).json({ message: 'Terjadi kesalahan saat mengambil detail barang.' });
     }
 };
+
+// Fungsi untuk melihat barang milik user yang sedang login
+exports.getMyListings = async (req, res) => {
+    try {
+        // req.user.id didapatkan dari authMiddleware
+        const sellerId = req.user.id; 
+
+        const query = `
+            SELECT l.*, i.image_url AS thumbnail 
+            FROM listings l
+            LEFT JOIN listing_images i ON l.id = i.listing_id AND i.slot_type = 'front'
+            WHERE l.seller_id = ?
+            ORDER BY l.created_at DESC
+        `;
+        
+        const [myListings] = await pool.execute(query, [sellerId]);
+
+        res.status(200).json({
+            message: 'Berhasil mengambil data barang milikmu',
+            total_items: myListings.length,
+            data: myListings
+        });
+
+    } catch (error) {
+        console.error('Error Get My Listings:', error);
+        res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
+    }
+};
