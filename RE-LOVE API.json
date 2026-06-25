@@ -1,0 +1,244 @@
+{
+  "v": 12,
+  "name": "RE-LOVE API",
+  "folders": [],
+  "requests": [
+    {
+      "v": "17",
+      "name": "POST - Upload Barang Baru",
+      "method": "POST",
+      "endpoint": "http://localhost:5000/api/listings/create",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": "multipart/form-data",
+        "body": [
+          {
+            "key": "seller_id",
+            "active": true,
+            "isFile": false,
+            "value": "1"
+          },
+          {
+            "key": "title",
+            "active": true,
+            "isFile": false,
+            "value": "Kemeja Kotak Uniqlo"
+          },
+          {
+            "key": "brand",
+            "active": true,
+            "isFile": false,
+            "value": "Uniqlo"
+          },
+          {
+            "key": "category",
+            "active": true,
+            "isFile": false,
+            "value": "Atasan"
+          },
+          {
+            "key": "price",
+            "active": true,
+            "isFile": false,
+            "value": "50000"
+          },
+          {
+            "key": "slot_types",
+            "active": true,
+            "isFile": false,
+            "value": "[\"front\", \"back\", \"tag\", \"minus\", \"detail\"]"
+          },
+          {
+            "key": "size",
+            "active": true,
+            "isFile": false,
+            "value": "L"
+          },
+          {
+            "key": "condition_description",
+            "active": true,
+            "isFile": false,
+            "value": "Masih mulus 90%"
+          },
+          {
+            "key": "images",
+            "active": true,
+            "isFile": false,
+            "value": ""
+          },
+          {
+            "key": "images",
+            "active": true,
+            "isFile": false,
+            "value": ""
+          },
+          {
+            "key": "images",
+            "active": true,
+            "isFile": false,
+            "value": ""
+          },
+          {
+            "key": "images",
+            "active": true,
+            "isFile": false,
+            "value": ""
+          },
+          {
+            "key": "images",
+            "active": true,
+            "isFile": false,
+            "value": ""
+          }
+        ]
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    },
+    {
+      "v": "17",
+      "name": "POST - Registrasi User",
+      "method": "POST",
+      "endpoint": "http://localhost:5000/api/auth/register",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": "application/json",
+        "body": "{\n    \"name\": \"Siti\",\n    \"email\": \"siti@mail.com\",\n    \"phone_number\": \"089876543210\",\n    \"password\": \"rahasia\"\n}"
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    },
+    {
+      "v": "17",
+      "name": "POST - Login User",
+      "method": "POST",
+      "endpoint": "http://localhost:5000/api/auth/login",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": "application/json",
+        "body": "{\n    \"email\": \"siti@mail.com\",\n    \"password\": \"rahasia\"\n}"
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    },
+    {
+      "v": "17",
+      "name": "POST - Checkout Pesanan",
+      "method": "POST",
+      "endpoint": "http://localhost:5000/api/transactions/checkout",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "bearer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJzaXRpQG1haWwuY29tIiwiaWF0IjoxNzgyMzA4MDU3LCJleHAiOjE3ODIzOTQ0NTd9.YUK3aUJE98SEAaDIyaL_csvgoeYrv08UXHkN9oIakbA",
+        "authActive": true
+      },
+      "body": {
+        "contentType": "application/json",
+        "body": "{\n\"listing_id\": 1\n}"
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    },
+    {
+      "v": "17",
+      "name": "GET Order History",
+      "method": "GET",
+      "endpoint": "http://localhost:5000/api/transactions/history",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "bearer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJzaXRpQG1haWwuY29tIiwiaWF0IjoxNzgyMzA4MDU3LCJleHAiOjE3ODIzOTQ0NTd9.YUK3aUJE98SEAaDIyaL_csvgoeYrv08UXHkN9oIakbA",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    },
+    {
+      "v": "17",
+      "name": "GET - Semua Katalog Barang",
+      "method": "GET",
+      "endpoint": "http://localhost:5000/api/listings",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    },
+    {
+      "v": "17",
+      "name": "GET - Detail Barang by ID",
+      "method": "GET",
+      "endpoint": "http://localhost:5000/api/listings/1",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    }
+  ],
+  "headers": [],
+  "auth": {
+    "authType": "none",
+    "authActive": true
+  },
+  "variables": [],
+  "description": "",
+  "preRequestScript": "",
+  "testScript": ""
+}

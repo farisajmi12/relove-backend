@@ -8,7 +8,9 @@ exports.registerUser = async (req, res) => {
 
         // Validasi input sederhana
         if (!name || !email || !phone_number || !password) {
-            return res.status(400).json({ message: 'Semua kolom wajib diisi!' });
+            return res.status(400).json({
+                success: false,
+                message: 'Semua kolom wajib diisi!' });
         }
 
         // Enkripsi password menggunakan bcrypt dengan salt rounds 10
@@ -20,6 +22,7 @@ exports.registerUser = async (req, res) => {
         const [result] = await pool.execute(query, [name, email, phone_number, password_hash]);
 
         res.status(201).json({
+            success: true,
             message: 'Registrasi berhasil!',
             userId: result.insertId
         });
@@ -28,9 +31,15 @@ exports.registerUser = async (req, res) => {
         console.error('Error saat registrasi:', error);
         // Tangani error duplicate email/phone (Unique Index)
         if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({ message: 'Email atau Nomor HP sudah terdaftar.' });
+            return res.status(409).json({ 
+                success: false,
+                message: 'Email atau Nomor HP sudah terdaftar.' 
+            });
         }
-        res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
+        res.status(500).json({ 
+            success: false,
+            message: 'Terjadi kesalahan pada server.' 
+        });
     }
 };
 
@@ -40,13 +49,19 @@ exports.loginUser = async (req, res) => {
 
         // 1. Validasi input
         if (!email || !password) {
-            return res.status(400).json({ message: 'Email dan password wajib diisi!' });
+            return res.status(400).json({ 
+                success: false,
+                message: 'Email dan password wajib diisi!' 
+            });
         }
 
         // 2. Cari user di database berdasarkan email
         const [users] = await pool.execute('SELECT * FROM users WHERE email = ?', [email]);
         if (users.length === 0) {
-            return res.status(401).json({ message: 'Email tidak terdaftar.' });
+            return res.status(401).json({ 
+                success: false,
+                message: 'Email tidak terdaftar.' 
+            });
         }
 
         const user = users[0];
@@ -54,7 +69,10 @@ exports.loginUser = async (req, res) => {
         // 3. Cocokkan password yang dikirim dengan password hash di database
         const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
-            return res.status(401).json({ message: 'Password salah.' });
+            return res.status(401).json({ 
+                success: false,
+                message: 'Password salah.' 
+            });
         }
 
         // 4. Buat token JWT jika login sukses (berlaku 24 jam)
@@ -66,6 +84,7 @@ exports.loginUser = async (req, res) => {
 
         // 5. Kirim balasan sukses beserta token
         res.status(200).json({
+            success: true,
             message: 'Login berhasil!',
             token: token,
             user: {
@@ -77,6 +96,9 @@ exports.loginUser = async (req, res) => {
 
     } catch (error) {
         console.error('Error saat login:', error);
-        res.status(500).json({ message: 'Terjadi kesalahan internal server.' });
+        res.status(500).json({ 
+            success: false,
+            message: 'Terjadi kesalahan internal server.' 
+        });
     }
 };

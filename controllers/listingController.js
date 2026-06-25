@@ -11,7 +11,9 @@ exports.createListing = async (req, res) => {
 
         // 1. VALIDASI SISI SERVER (FR-01): Cek jumlah file
         if (!files || files.length !== 5) {
-            return res.status(400).json({ message: 'Validasi Gagal: Wajib mengunggah tepat 5 foto.' });
+            return res.status(400).json({ 
+                success: false,
+                message: 'Validasi Gagal: Wajib mengunggah tepat 5 foto.' });
         }
 
         // Slot types dikirim dari frontend sebagai array string (contoh: ['front', 'back', 'tag', 'minus', 'detail'])
@@ -20,7 +22,9 @@ exports.createListing = async (req, res) => {
         try {
             parsedSlotTypes = typeof slot_types === 'string' ? JSON.parse(slot_types) : slot_types;
         } catch (e) {
-            return res.status(400).json({ message: 'Format slot_types tidak valid.' });
+            return res.status(400).json({ 
+                success: false,
+                message: 'Format slot_types tidak valid.' });
         }
 
         // 2. VALIDASI SISI SERVER (FR-01): Cek variasi elemen wajib
@@ -28,7 +32,9 @@ exports.createListing = async (req, res) => {
         const hasAllSlots = requiredSlots.every(slot => parsedSlotTypes.includes(slot));
         
         if (!hasAllSlots) {
-            return res.status(400).json({ message: 'Validasi Gagal: Tipe slot foto (Depan, Belakang, Label, Minus, Detail) tidak lengkap.' });
+            return res.status(400).json({ 
+                success: false,
+                message: 'Validasi Gagal: Tipe slot foto (Depan, Belakang, Label, Minus, Detail) tidak lengkap.' });
         }
 
         // 3. Simpan data ke tabel 'listings'
@@ -58,6 +64,7 @@ exports.createListing = async (req, res) => {
         connection.release();
 
         res.status(201).json({
+            success: true,
             message: 'Listing berhasil dibuat dengan 5 foto terstandar!',
             listingId: listingId
         });
@@ -68,6 +75,7 @@ exports.createListing = async (req, res) => {
         
         // Ubah balasan res.status agar memunculkan pesan aslinya di Hoppscotch
         res.status(500).json({ 
+            success: false,
             message: 'Terjadi kesalahan saat upload.', 
             error: error.message || error 
         });
@@ -112,6 +120,7 @@ exports.getAllListings = async (req, res) => {
 
         // Kembalikan hasil ke frontend
         res.status(200).json({
+            success: true,
             message: 'Berhasil mengambil data katalog',
             total_items: listings.length,
             data: listings
@@ -119,7 +128,10 @@ exports.getAllListings = async (req, res) => {
 
     } catch (error) {
         console.error('Detail Error Get Listings:', error);
-        res.status(500).json({ message: 'Terjadi kesalahan saat mengambil data katalog.' });
+        res.status(500).json({ 
+            success: false,
+            message: 'Terjadi kesalahan saat mengambil data katalog.' 
+        });
     }
 };
 
@@ -139,7 +151,10 @@ exports.getListingById = async (req, res) => {
 
         // Jika barang tidak ada di database
         if (listings.length === 0) {
-            return res.status(404).json({ message: 'Barang tidak ditemukan.' });
+            return res.status(404).json({ 
+                success: false,
+                message: 'Barang tidak ditemukan.' 
+            });
         }
 
         const listingData = listings[0];
@@ -155,13 +170,17 @@ exports.getListingById = async (req, res) => {
 
         // Kirim balasan sukses
         res.status(200).json({
+            success: true,
             message: 'Berhasil mengambil detail barang',
             data: listingData
         });
 
     } catch (error) {
         console.error('Detail Error Get Listing By ID:', error);
-        res.status(500).json({ message: 'Terjadi kesalahan saat mengambil detail barang.' });
+        res.status(500).json({ 
+            success: false,
+            message: 'Terjadi kesalahan saat mengambil detail barang.' 
+        });
     }
 };
 
@@ -182,6 +201,7 @@ exports.getMyListings = async (req, res) => {
         const [myListings] = await pool.execute(query, [sellerId]);
 
         res.status(200).json({
+            success: true,
             message: 'Berhasil mengambil data barang milikmu',
             total_items: myListings.length,
             data: myListings
@@ -189,6 +209,9 @@ exports.getMyListings = async (req, res) => {
 
     } catch (error) {
         console.error('Error Get My Listings:', error);
-        res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
+        res.status(500).json({ 
+            success: false,
+            message: 'Terjadi kesalahan pada server.' 
+        });
     }
 };
